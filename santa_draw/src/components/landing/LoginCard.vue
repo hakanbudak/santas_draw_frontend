@@ -3,12 +3,11 @@
       class="relative w-full max-w-2xl bg-white/95 backdrop-blur-md border border-red-200
            rounded-3xl shadow-[0_20px_60px_rgba(127,29,29,0.4)] px-6 py-10 md:px-12 z-10
            min-h-[550px] flex flex-col justify-center">
-
     <button
         type="button"
         class="mb-6 inline-flex items-center text-sm text-slate-500 hover:text-red-600 transition-colors"
         @click="$emit('go-register')">
-      ← Geri dön
+      ← Kayıt ol
     </button>
 
     <div class="text-center mb-8">
@@ -28,8 +27,7 @@
           name="email"
           label="Email"
           placeholder="Enter your email address"
-          @onFocus="clearError('email')"
-      />
+          @onFocus="clearError('email')" />
 
       <Input
           id="login-password"
@@ -39,16 +37,24 @@
           name="password"
           label="Password"
           placeholder="Enter your password"
-          @onFocus="clearError('password')"
-      />
+          @onFocus="clearError('password')" />
 
-      <button
+      <Button
           type="button"
-          class="mt-4 inline-flex justify-center items-center rounded-xl bg-red-600
-               text-white text-lg font-semibold py-3 hover:bg-red-700 transition-all"
+          class="mt-2 inline-flex justify-center items-center rounded-xl bg-red-600
+               text-white text-lg font-semibold py-3 hover:bg-red-700 transition-all
+               disabled:opacity-60 disabled:cursor-not-allowed"
+          :disabled="loading"
           @click="submitForm">
-        Giriş Yap
-      </button>
+        <span v-if="!loading">Giriş Yap</span>
+        <span v-else>Giriş yapılıyor...</span>
+      </Button>
+
+      <p
+          v-if="generalError"
+          class="text-center text-sm text-red-500 mt-1">
+        {{ generalError }}
+      </p>
 
       <p class="text-center text-sm text-neutral-500 mt-2">
         🎁 Çekiliş macerası başlıyor!
@@ -58,12 +64,18 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue"
+import { reactive, ref } from "vue"
+import axios, { AxiosError } from "axios"
+import api from "@/services/api"
+import { handleAuthSuccess } from "@/services/authHelpers"
+import { validateEmail } from "@/helpers/common";
+import type { AuthResponse } from "@/types"
 import Input from "@/components/ui-kit/input/Input.vue"
+import Button from "@/components/ui-kit/button/Button.vue"
 
 const emit = defineEmits<{
-  (e: "submit", payload: { email: string; password: string }): void
   (e: "go-register"): void
+  (e: "login-success"): void
 }>()
 
 const form = reactive({
@@ -77,28 +89,79 @@ const form = reactive({
   },
 })
 
+const loading = ref(false)
+const generalError = ref("")
+
 const clearError = (key: "email" | "password") => {
   form[key].inValidMessage = ""
 }
 
-const submitForm = () => {
-  let valid = true
+const addError = (key: "email" | "password", message: string) => {
+  form[key].inValidMessage = message
+}
 
-  if (!form.email.value) {
-    form.email.inValidMessage = "Email required"
-    valid = false
+const validateEmailInput = () => {
+  if (!form.email.value || !validateEmail(form.email.value)) {
+    addError("email", "Please enter a valid email address!")
+    return false
   }
+  return true
+}
 
+const validatePasswordInput = () => {
   if (!form.password.value) {
-    form.password.inValidMessage = "Password required"
-    valid = false
+    addError("password", "Please enter a password!")
+    return false
   }
 
-  if (!valid) return
+  if (form.password.value.length < 6) {
+    addError("password", "Password must be at least 6 characters.")
+    return false
+  }
 
-  emit("submit", {
+  return true
+}
+
+async function loginRequest(): Promise<AuthResponse> {
+  const url = "/api/v1/auth/login"
+
+  const response = await api.post<AuthResponse>(url, {
     email: form.email.value,
     password: form.password.value,
   })
+
+  return response.data
+}
+
+const submitForm = async () => {
+  generalError.value = ""
+  clearError("email")
+  clearError("password")
+
+  const isEmailValid = validateEmailInput()
+  const isPasswordValid = validatePasswordInput()
+
+  if (!isEmailValid || !isPasswordValid) return
+
+  loading.value = true
+
+  try {
+    const data = await loginRequest()
+
+    handleAuthSuccess(data)
+
+    emit("login-success")
+  } catch (err) {
+    const error = err as AxiosError<{ message?: string }>
+    let message = "Something went wrong while logging you in."
+
+    if (axios.isAxiosError(error) && error.response) {
+      message = error.response.data?.message || message
+    }
+
+    generalError.value = message
+  } finally {
+    loading.value = false
+  }
 }
 </script>
