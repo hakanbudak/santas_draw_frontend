@@ -11,6 +11,16 @@ const routes = [
         name: 'draw-manuel',
         component: () => import('@/views/DrawView.vue'),
     },
+    {
+        path: '/draw/dynamic',
+        name: 'draw-dynamic',
+        component: () => import('@/views/DrawView.vue'),
+    },
+    {
+        path: '/draw/join/:inviteCode?',
+        name: 'join-draw',
+        component: () => import('@/views/JoinDrawView.vue'),
+    },
 ]
 
 export const router = createRouter({
