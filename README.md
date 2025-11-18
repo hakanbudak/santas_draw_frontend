@@ -242,9 +242,9 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 
 ## 📧 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+Linkedin - [https://www.linkedin.com/in/hakan-budak-7ab3071b5/](https://www.linkedin.com/in/hakan-budak-7ab3071b5/)
 
-Project Link: [https://github.com/yourusername/santa_draw](https://github.com/yourusername/santa_draw)
+Project Link: [https://github.com/hakanbudak/santas_draw_frontend](https://github.com/hakanbudak/santas_draw_frontend)
 
 ## 🙏 Acknowledgments
 
