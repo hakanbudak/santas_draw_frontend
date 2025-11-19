@@ -114,6 +114,16 @@ const messages = {
       emptyState:
         "Henüz davet linkiyle katılan yok. Linki arkadaşlarınla paylaş ve buradan takibini yap.",
       deleteButton: "Sil",
+      howItWorks: {
+        title: "Nasıl Çalışır?",
+        intro: "Çekiliş sürecini başlatmak için aşağıdaki adımları takip edin. Davet linki modunda katılımcılar formu doldurarak çekilişe katılabilirler.",
+        step1Title: "Çekilişi Oluştur",
+        step1Desc: "Çekiliş grubunuzu oluşturun, gerekli ayarları yapın ve çekiliş tarihini belirleyin.",
+        step2Title: "Paylaş ve Katılımcı Topla",
+        step2Desc: "Oluşturulan davet linkini katılımcılarla paylaşın. Katılımcılar formu doldurdukça listede görünecektir.",
+        step3Title: "Çekilişi Gerçekleştir",
+        step3Desc: "Belirlediğiniz tarihte otomatik olarak veya manuel olarak çekilişi gerçekleştirebilirsiniz.",
+      },
     },
     participantsPanel: {
       tagline: "Etkinliklerim",
@@ -326,6 +336,16 @@ const messages = {
       emptyState:
         "No invite entries yet. Share the link with friends and track them here.",
       deleteButton: "Remove",
+      howItWorks: {
+        title: "How It Works?",
+        intro: "Follow the steps below to start the draw process. In invite link mode, participants can join the draw by filling out the form.",
+        step1Title: "Create the Draw",
+        step1Desc: "Create your draw group, configure the necessary settings, and set the draw date.",
+        step2Title: "Share and Collect Participants",
+        step2Desc: "Share the generated invite link with participants. As participants fill out the form, they will appear in the list.",
+        step3Title: "Execute the Draw",
+        step3Desc: "You can execute the draw automatically on your scheduled date or manually at any time.",
+      },
     },
     participantsPanel: {
       tagline: "My Draws",

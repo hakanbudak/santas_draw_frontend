@@ -60,43 +60,82 @@
       </div>
     </div>
 
-    <div class="mb-3 md:mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-      <div>
-        <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-500">
-          {{ t("invitePanel.previewTagline") }}
-        </p>
-        <h3 class="mt-1.5 md:mt-2 text-lg md:text-xl lg:text-2xl font-bold text-red-700">
-          {{ t("invitePanel.previewTitle") }}
-        </h3>
-      </div>
-
-      <button
-          type="button"
-          class="inline-flex items-center gap-1 rounded-lg md:rounded-xl border border-red-200
-                 bg-white px-2.5 md:px-3 py-1 md:py-1.5 text-xs md:text-sm font-medium text-red-700
-                 hover:bg-red-50 transition-all disabled:opacity-60"
-          :disabled="isLoadingInvites || !drawId"
-          @click="$emit('refresh')"
-      >
-        <span v-if="!isLoadingInvites">{{ t("invitePanel.refresh") }}</span>
-        <span v-else>{{ t("invitePanel.refreshing") }}</span>
-      </button>
-    </div>
-
-    <p class="text-sm md:text-base text-slate-600 mb-2 md:mb-3">
-      {{ t("invitePanel.description") }}
-    </p>
-
     <div class="flex-1 mt-2">
       <div
           v-if="!invitedParticipants.length && !isLoadingInvites"
-          class="h-full flex items-center justify-center"
+          class="h-full flex flex-col justify-center"
       >
-        <div class="text-center space-y-3 max-w-xs">
-          <div class="text-5xl">🎄</div>
-          <p class="text-slate-600 text-sm">
-            {{ t("invitePanel.emptyState") }}
-          </p>
+        <div class="w-full">
+          <div class="mb-6 md:mb-8">
+            <h3 class="text-2xl md:text-3xl lg:text-4xl font-bold text-red-700 mb-3">
+              {{ t("invitePanel.howItWorks.title") }}
+            </h3>
+            <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+              {{ t("invitePanel.howItWorks.intro") }}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-6 md:gap-8">
+            <div class="step-card group relative step-animation" style="animation-delay: 0.1s">
+              <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="relative bg-white rounded-3xl p-6 md:p-8 shadow-lg border-2 border-red-100 group-hover:border-red-300 group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-6">
+                <div class="absolute top-3 right-3 text-3xl md:text-4xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
+                  🎅
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="step-number text-7xl md:text-8xl font-bold text-red-600 opacity-30">
+                    1
+                  </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                  <h4 class="text-xl md:text-2xl font-bold text-red-700 mb-3">{{ t("invitePanel.howItWorks.step1Title") }}</h4>
+                  <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+                    {{ t("invitePanel.howItWorks.step1Desc") }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-card group relative step-animation" style="animation-delay: 0.3s">
+              <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="relative bg-white rounded-3xl p-6 md:p-8 shadow-lg border-2 border-red-100 group-hover:border-red-300 group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-6">
+                <div class="absolute top-3 right-3 text-3xl md:text-4xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
+                  🦌
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="step-number text-7xl md:text-8xl font-bold text-red-600 opacity-30">
+                    2
+                  </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                  <h4 class="text-xl md:text-2xl font-bold text-red-700 mb-3">{{ t("invitePanel.howItWorks.step2Title") }}</h4>
+                  <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+                    {{ t("invitePanel.howItWorks.step2Desc") }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-card group relative step-animation" style="animation-delay: 0.5s">
+              <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="relative bg-white rounded-3xl p-6 md:p-8 shadow-lg border-2 border-red-100 group-hover:border-red-300 group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-6">
+                <div class="absolute top-3 right-3 text-3xl md:text-4xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
+                  🎁
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="step-number text-7xl md:text-8xl font-bold text-red-600 opacity-30">
+                    3
+                  </div>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                  <h4 class="text-xl md:text-2xl font-bold text-red-700 mb-3">{{ t("invitePanel.howItWorks.step3Title") }}</h4>
+                  <p class="text-sm md:text-base text-slate-600 leading-relaxed">
+                    {{ t("invitePanel.howItWorks.step3Desc") }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -227,9 +266,43 @@ const isShareSectionOpen = ref(true);
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .participant-item {
   animation: slideIn 0.3s ease-out forwards;
   opacity: 0;
 }
-</style>
 
+.step-card {
+  perspective: 1000px;
+}
+
+.step-card:hover {
+  z-index: 10;
+}
+
+.step-animation {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.step-number {
+  font-family: 'Arial Black', 'Arial Bold', 'Helvetica Neue', sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-shadow: 
+    3px 3px 0px rgba(220, 38, 38, 0.2),
+    6px 6px 10px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+  line-height: 1;
+}
+</style>
