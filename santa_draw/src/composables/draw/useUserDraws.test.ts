@@ -50,16 +50,19 @@ describe('useUserDraws', () => {
     expect(isLoading.value).toBe(false)
   })
 
-  it('should fetch user draw successfully', async () => {
+  it('should fetch user draws successfully', async () => {
     const mockUser = { id: 123, email: 'test@example.com' }
-    const mockDrawDetail = {
-      id: 1,
-      drawType: 'dynamic',
-      status: 'active',
-      inviteCode: 'test-code',
-      createdAt: '2024-01-01T00:00:00Z',
-      participants: [],
-    }
+    const mockDraws = [
+      {
+        id: 1,
+        drawType: 'dynamic',
+        status: 'active',
+        inviteCode: 'test-code',
+        participantCount: 5,
+        createdAt: '2024-01-01T00:00:00Z',
+        drawDate: null,
+      },
+    ]
 
     localStorageMock.getItem.mockImplementation((key: string) => {
       if (key === TOKEN_KEY) return 'mock-token'
@@ -67,13 +70,13 @@ describe('useUserDraws', () => {
       return null
     })
 
-    ;(api.get as any).mockResolvedValue({ data: mockDrawDetail })
+    ;(api.get as any).mockResolvedValue({ data: mockDraws })
 
     const { activeDraws, isLoading, fetchUserDraw } = useUserDraws()
 
     await fetchUserDraw()
 
-    expect(api.get).toHaveBeenCalledWith('/api/v1/draws/123')
+    expect(api.get).toHaveBeenCalledWith('/api/v1/draws')
     expect(activeDraws.value).toHaveLength(1)
     expect(activeDraws.value[0].id).toBe(1)
     expect(activeDraws.value[0].status).toBe('active')
@@ -82,14 +85,17 @@ describe('useUserDraws', () => {
 
   it('should filter out completed draws', async () => {
     const mockUser = { id: 123, email: 'test@example.com' }
-    const mockDrawDetail = {
-      id: 1,
-      drawType: 'dynamic',
-      status: 'completed',
-      inviteCode: 'test-code',
-      createdAt: '2024-01-01T00:00:00Z',
-      participants: [],
-    }
+    const mockDraws = [
+      {
+        id: 1,
+        drawType: 'dynamic',
+        status: 'completed',
+        inviteCode: 'test-code',
+        participantCount: 5,
+        createdAt: '2024-01-01T00:00:00Z',
+        drawDate: null,
+      },
+    ]
 
     localStorageMock.getItem.mockImplementation((key: string) => {
       if (key === TOKEN_KEY) return 'mock-token'
@@ -97,7 +103,7 @@ describe('useUserDraws', () => {
       return null
     })
 
-    ;(api.get as any).mockResolvedValue({ data: mockDrawDetail })
+    ;(api.get as any).mockResolvedValue({ data: mockDraws })
 
     const { activeDraws, fetchUserDraw } = useUserDraws()
 
@@ -108,14 +114,17 @@ describe('useUserDraws', () => {
 
   it('should include in_progress status draws', async () => {
     const mockUser = { id: 123, email: 'test@example.com' }
-    const mockDrawDetail = {
-      id: 1,
-      drawType: 'dynamic',
-      status: 'in_progress',
-      inviteCode: 'test-code',
-      createdAt: '2024-01-01T00:00:00Z',
-      participants: [],
-    }
+    const mockDraws = [
+      {
+        id: 1,
+        drawType: 'dynamic',
+        status: 'in_progress',
+        inviteCode: 'test-code',
+        participantCount: 5,
+        createdAt: '2024-01-01T00:00:00Z',
+        drawDate: null,
+      },
+    ]
 
     localStorageMock.getItem.mockImplementation((key: string) => {
       if (key === TOKEN_KEY) return 'mock-token'
@@ -123,7 +132,7 @@ describe('useUserDraws', () => {
       return null
     })
 
-    ;(api.get as any).mockResolvedValue({ data: mockDrawDetail })
+    ;(api.get as any).mockResolvedValue({ data: mockDraws })
 
     const { activeDraws, fetchUserDraw } = useUserDraws()
 
@@ -186,17 +195,23 @@ describe('useUserDraws', () => {
       drawType: 'dynamic',
       status: 'active',
       inviteCode: 'test-code',
+      requireAddress: true,
+      requirePhone: false,
+      drawDate: '2024-01-01T00:00:00Z',
       createdAt: '2024-01-01T00:00:00Z',
+      language: 'tr',
+      participantCount: 5,
       participants: [],
     }
 
-    ;(api.get as any).mockResolvedValue({ data: mockDrawDetail })
+    ;(api.get as any).mockResolvedValueOnce({ data: [] })
+    ;(api.get as any).mockResolvedValueOnce({ data: mockDrawDetail })
 
     const { fetchDrawDetail } = useUserDraws()
 
-    const result = await fetchDrawDetail(1)
+    const result = await fetchDrawDetail('test-code')
 
-    expect(api.get).toHaveBeenCalledWith('/api/v1/draws/1')
+    expect(api.get).toHaveBeenLastCalledWith('/api/v1/draws/test-code', { params: { inviteCode: 'test-code' } })
     expect(result).toEqual(mockDrawDetail)
   })
 
@@ -208,11 +223,12 @@ describe('useUserDraws', () => {
       },
     }
 
-    ;(api.get as any).mockRejectedValue(mockError)
+    ;(api.get as any).mockResolvedValueOnce({ data: [] })
+    ;(api.get as any).mockRejectedValueOnce(mockError)
 
     const { fetchDrawDetail } = useUserDraws()
 
-    const result = await fetchDrawDetail(999)
+    const result = await fetchDrawDetail('missing')
 
     expect(result).toBeNull()
   })

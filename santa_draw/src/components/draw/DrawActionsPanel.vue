@@ -61,7 +61,7 @@
               @click="goToRegister"
               class="flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-lg md:rounded-xl bg-green-600
                    text-white text-xs md:text-sm font-semibold px-4 md:px-6 py-2 md:py-2.5
-                   hover:bg-green-700 hover:shadow-lg transition-all whitespace-nowrap">
+                   hover:bg-green-700 hover:shadow-lg transition-all whitespace-nowrap cursor-pointer">
             {{ t("draw.registerPromptButton") }}
             <span aria-hidden="true">→</span>
           </button>
@@ -235,7 +235,7 @@
                   type="button"
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
-                       transition-all"
+                       transition-all cursor-pointer"
                   @click="handleAddParticipant">
                 {{ editingParticipantId ? t("draw.manualButtons.update") : t("draw.manualButtons.add") }}
               </button>
@@ -258,7 +258,7 @@
                   :disabled="isSaving"
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
-                       transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                       transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                   @click="saveOrganizer">
                 <span v-if="!isSaving">{{ t("draw.inviteButtons.save") }}</span>
                 <span v-else>{{ t("draw.inviteButtons.saving") }}</span>
@@ -268,7 +268,7 @@
                   type="button"
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-green-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-green-700 hover:shadow-md
-                       transition-all"
+                       transition-all cursor-pointer"
                   @click="handleNewDraw">
                 {{ t("draw.inviteButtons.newDraw") }}
               </button>
@@ -306,6 +306,7 @@
         :is-draw-date-enabled="isDrawDateEnabled"
         :draw-date="drawDate"
         :is-organizer-saved="isOrganizerSaved"
+        :is-draw-locked="isInviteDrawLocked"
         @copy="copyToClipboard"
         @refresh="fetchInvitedParticipants"
         @execute-draw="executeDraw"
@@ -384,6 +385,7 @@ const {
   isCopied,
   showExecuteSuccessModal,
   isOrganizerSaved,
+  isInviteDrawLocked,
   normalizeDrawDate,
   saveOrganizer,
   fetchInvitedParticipants,
@@ -419,6 +421,39 @@ const hideModeToggle = computed(() => {
   return matchesTrue(value?.toString());
 });
 
+const isInviteRoute = (path: string) => path === "/draw/dynamic" || path.startsWith("/draws/");
+
+const getRouteInviteCode = () => {
+  const queryValue = route.query.inviteCode;
+  if (typeof queryValue === "string" && queryValue.trim()) {
+    return queryValue;
+  }
+  const paramValue = route.params.inviteCode;
+  if (typeof paramValue === "string" && paramValue.trim()) {
+    return paramValue;
+  }
+  return undefined;
+};
+
+let lastInviteCodeFromRoute: string | undefined;
+
+const handleRouteInviteCodeChange = async () => {
+  const code = getRouteInviteCode();
+  if (!code) {
+    lastInviteCodeFromRoute = undefined;
+    isInviteDrawLocked.value = false;
+    return;
+  }
+  if (code === lastInviteCodeFromRoute) {
+    return;
+  }
+  lastInviteCodeFromRoute = code;
+  isInviteDrawLocked.value = false;
+  setInviteLink(code);
+  isOrganizerSaved.value = true;
+  await fetchInvitedParticipants();
+};
+
 const localeMap: Record<string, string> = {
   tr: "tr-TR",
   en: "en-US",
@@ -430,21 +465,6 @@ const formatDrawDate = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
   const currentLocale = localeMap[locale.value] || "tr-TR";
   return new Intl.DateTimeFormat(currentLocale, options).format(date);
-};
-
-const switchToInviteMode = () => {
-  if (hideModeToggle.value) return;
-  mode.value = "invite";
-  if (route.path !== "/draw/dynamic") {
-    router.push({ path: "/draw/dynamic", query: route.query });
-  }
-};
-
-const switchToManualMode = () => {
-  mode.value = "manual";
-  if (route.path !== "/draw/manual") {
-    router.push({ path: "/draw/manual", query: route.query });
-  }
 };
 
 const handleResetDraw = () => {
@@ -459,6 +479,24 @@ const handleNewDraw = () => {
   resetForm();
   requireAddress.value = false;
   requirePhone.value = false;
+  lastInviteCodeFromRoute = undefined;
+};
+
+const switchToInviteMode = () => {
+  if (hideModeToggle.value) return;
+  handleResetDraw();
+  handleNewDraw();
+  mode.value = "invite";
+  if (route.path !== "/draw/dynamic") {
+    router.push({ path: "/draw/dynamic", query: route.query });
+  }
+};
+
+const switchToManualMode = () => {
+  mode.value = "manual";
+  if (route.path !== "/draw/manual") {
+    router.push({ path: "/draw/manual", query: route.query });
+  }
 };
 
 const goToRegister = () => {
@@ -471,7 +509,7 @@ const dismissRegisterPrompt = () => {
 };
 
 const syncModeWithRoute = (path: string) => {
-  if (path === "/draw/dynamic") {
+  if (isInviteRoute(path)) {
     mode.value = "invite";
   } else if (path === "/draw/manual") {
     mode.value = "manual";
@@ -496,25 +534,28 @@ const enforceModeRestrictions = () => {
 
 onMounted(() => {
   enforceModeRestrictions();
-  const inviteCodeParam = route.query.inviteCode as string | undefined;
-  if (route.path === "/draw/dynamic" && inviteCodeParam) {
-    setInviteLink(inviteCodeParam);
-  }
+  void handleRouteInviteCodeChange();
 });
 
 watch(
   () => route.path,
   () => {
     enforceModeRestrictions();
+    void handleRouteInviteCodeChange();
   },
 );
 
 watch(
   () => route.query.inviteCode,
-  (code) => {
-    if (typeof code === "string" && code) {
-      setInviteLink(code);
-    }
+  () => {
+    void handleRouteInviteCodeChange();
+  },
+);
+
+watch(
+  () => route.params.inviteCode,
+  () => {
+    void handleRouteInviteCodeChange();
   },
 );
 
@@ -528,13 +569,16 @@ watch(
 const loadDrawDetail = (drawDetail: DrawDetail) => {
   // Switch to invite mode
   mode.value = "invite";
-  if (route.path !== "/draw/dynamic") {
-    router.push({ path: "/draw/dynamic", query: route.query });
+  if (drawDetail.inviteCode) {
+    router.push({ path: `/draws/${drawDetail.inviteCode}`, query: route.query }).catch(() => undefined);
+  } else if (route.path !== "/draw/dynamic") {
+    router.push({ path: "/draw/dynamic", query: route.query }).catch(() => undefined);
   }
 
   // Load draw details into invite actions
   drawId.value = drawDetail.id;
   setInviteLink(drawDetail.inviteCode);
+  isOrganizerSaved.value = true;
   requireAddress.value = drawDetail.requireAddress;
   requirePhone.value = drawDetail.requirePhone;
   if (drawDetail.drawDate) {

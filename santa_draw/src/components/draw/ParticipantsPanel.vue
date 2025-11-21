@@ -1,7 +1,7 @@
 <template>
   <div
       v-if="hasFetched && activeDraws.length > 0"
-      class="w-full md:w-1/3 bg-gradient-to-br from-red-50 to-green-50 rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8 flex flex-col">
+      class="w-full md:w-1/3 bg-gradient-to-br from-red-50 to-green-50 rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8 flex flex-col max-h-[820px] md:max-h-[920px] overflow-hidden">
     <div class="text-center mb-4 md:mb-6">
       <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-500">
         {{ t("participantsPanel.tagline") }}
@@ -27,18 +27,18 @@
       </div>
     </div>
 
-    <div v-else class="flex-1 flex flex-col gap-2 md:gap-3">
+    <div v-else class="flex-1 flex flex-col gap-2 md:gap-3 overflow-y-auto pr-1 md:pr-2">
       <button
           v-for="draw in activeDraws"
           :key="draw.id"
           type="button"
           :class="[
-            'text-left rounded-xl md:rounded-2xl border-2 p-3 md:p-4 transition-all',
+            'text-left rounded-xl md:rounded-2xl border-2 p-3 md:p-4 transition-all cursor-pointer',
             selectedDrawId === draw.id 
               ? 'bg-white border-red-400 shadow-lg ring-2 ring-red-200' 
               : 'bg-white/80 border-red-200 hover:bg-white hover:shadow-md'
           ]"
-          @click="handleDrawClick(draw.id)">
+          @click="handleDrawClick(draw)">
         <div class="flex items-start justify-between gap-3">
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-2">
@@ -59,10 +59,10 @@
               <p class="text-xs text-slate-500 mt-0.5">
                 {{ t(`participantsPanel.drawType.${draw.drawType}`) }}
               </p>
+              <p class="text-xs text-slate-500 mt-0.5">
+                {{ t("participantsPanel.participantCount", { count: draw.participantCount }) }}
+              </p>
             </div>
-            <p class="text-xs md:text-sm text-slate-400 mt-2">
-              {{ t("participantsPanel.createdAt", { date: formatDate(draw.createdAt) }) }}
-            </p>
           </div>
           <div class="flex-shrink-0">
             <span class="text-red-500 text-lg">→</span>
@@ -74,12 +74,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserDraws } from "@/composables/draw/useUserDraws";
-import type { DrawDetail } from "./types";
+import type { DrawDetail, DrawListItem } from "./types";
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const { activeDraws, isLoading, hasFetched, fetchDrawDetail } = useUserDraws();
 const selectedDrawId = ref<number | null>(null);
 
@@ -87,25 +87,9 @@ const emit = defineEmits<{
   (e: "draw-selected", drawDetail: DrawDetail): void;
 }>();
 
-const localeMap: Record<string, string> = {
-  tr: "tr-TR",
-  en: "en-US",
-};
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  };
-  const currentLocale = localeMap[locale.value] || "tr-TR";
-  return new Intl.DateTimeFormat(currentLocale, options).format(date);
-};
-
-const handleDrawClick = async (drawId: number) => {
-  selectedDrawId.value = drawId;
-  const drawDetail = await fetchDrawDetail(drawId);
+const handleDrawClick = async (draw: DrawListItem) => {
+  selectedDrawId.value = draw.id;
+  const drawDetail = await fetchDrawDetail(draw.inviteCode);
   if (drawDetail) {
     emit("draw-selected", drawDetail);
   }

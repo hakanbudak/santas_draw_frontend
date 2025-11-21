@@ -48,7 +48,7 @@
       <Button
           class="mt-2 inline-flex justify-center items-center rounded-lg md:rounded-xl bg-red-600
                text-white text-base md:text-lg font-semibold py-2.5 md:py-3 hover:bg-red-700 transition-all
-               disabled:opacity-60 disabled:cursor-not-allowed w-full"
+               disabled:opacity-60 disabled:cursor-not-allowed w-full cursor-pointer"
           :disabled="loading"
           @click="submitForm">
         <span v-if="!loading">{{ t("auth.registerButton") }}</span>

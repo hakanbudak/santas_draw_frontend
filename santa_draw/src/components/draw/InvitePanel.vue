@@ -43,7 +43,7 @@
           <button
               type="button"
               @click="$emit('copy')"
-              class="px-3 md:px-4 py-2 rounded-lg bg-red-600 text-white text-sm md:text-base font-medium hover:bg-red-700 transition-all whitespace-nowrap"
+              class="px-3 md:px-4 py-2 rounded-lg bg-red-600 text-white text-sm md:text-base font-medium hover:bg-red-700 transition-all whitespace-nowrap cursor-pointer"
           >
             {{ t("invitePanel.copy") }}
           </button>
@@ -188,7 +188,7 @@
               ? 'bg-green-600 text-white hover:bg-green-700 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed'
               : 'bg-red-600 text-white hover:bg-red-700 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed'
           ]"
-          :disabled="!canExecuteDraw || isExecutingDraw"
+          :disabled="!canExecuteDraw || isExecutingDraw || isDrawLocked"
           @click="hasDrawDate ? $emit('show-ready-info') : $emit('execute-draw')"
       >
         <span v-if="isExecutingDraw">{{ t("draw.executingButton") }}</span>
@@ -227,6 +227,7 @@ const props = defineProps<{
   isDrawDateEnabled?: boolean;
   drawDate?: string;
   isOrganizerSaved?: boolean;
+  isDrawLocked?: boolean;
 }>();
 
 const hasDrawDate = computed(() => {

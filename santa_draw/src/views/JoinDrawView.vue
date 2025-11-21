@@ -161,7 +161,7 @@
             <button
                 type="submit"
                 :disabled="isSubmitting"
-                class="w-full px-6 py-3 rounded-xl bg-red-600 text-white text-sm font-semibold shadow-sm hover:bg-red-700 hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-6"
+                class="w-full px-6 py-3 rounded-xl bg-red-600 text-white text-sm font-semibold shadow-sm hover:bg-red-700 hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-6 cursor-pointer"
             >
               <span v-if="!isSubmitting">{{ t("join.submit") }}</span>
               <span v-else>{{ t("join.submitting") }}</span>

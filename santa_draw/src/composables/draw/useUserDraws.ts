@@ -8,9 +8,9 @@ import type { AuthUser } from "@/types";
 export function useUserDraws() {
   const { t } = useI18n();
   const activeDraws = ref<DrawListItem[]>([]);
-  const isLoading = ref(false);
+  const isLoading = ref<boolean>(false);
   const error = ref<string | null>(null);
-  const hasFetched = ref(false);
+  const hasFetched = ref<boolean>(false);
 
   const getUserFromStorage = (): AuthUser | null => {
     if (typeof window === "undefined") return null;
@@ -26,7 +26,7 @@ export function useUserDraws() {
   const fetchUserDraw = async () => {
     const token = localStorage.getItem(TOKEN_KEY);
     const user = getUserFromStorage();
-    
+
     if (!token || !user) {
       activeDraws.value = [];
       hasFetched.value = true;
@@ -36,24 +36,13 @@ export function useUserDraws() {
     isLoading.value = true;
     error.value = null;
     try {
-      // Use user.id from login response to fetch draw
-      const { data } = await api.get<DrawDetail>(`/api/v1/draws/${user.id}`);
-      
-      // Convert DrawDetail to DrawListItem format
-      const drawListItem: DrawListItem = {
-        id: data.id,
-        drawType: data.drawType,
-        status: data.status,
-        inviteCode: data.inviteCode,
-        createdAt: data.createdAt,
-      };
-      
-      // Show if status is active or in_progress (not completed or cancelled)
-      if (data.status === "active" || data.status === "in_progress") {
-        activeDraws.value = [drawListItem];
-      } else {
-        activeDraws.value = [];
-      }
+      const { data } = await api.get<DrawListItem[]>(`/api/v1/draws`);
+
+      const filtered = (data || []).filter((draw) =>
+        draw.status === "active" || draw.status === "in_progress"
+      );
+
+      activeDraws.value = filtered;
     } catch (err: any) {
       // If 404 or no draw exists, show empty state (this is expected)
       if (err?.response?.status === 404) {
@@ -69,9 +58,12 @@ export function useUserDraws() {
     }
   };
 
-  const fetchDrawDetail = async (drawId: number): Promise<DrawDetail | null> => {
+  const fetchDrawDetail = async (inviteCode: string): Promise<DrawDetail | null> => {
+    if (!inviteCode) return null;
     try {
-      const { data } = await api.get<DrawDetail>(`/api/v1/draws/${drawId}`);
+      const { data } = await api.get<DrawDetail>(`/api/v1/draws/${inviteCode}`, {
+        params: { inviteCode },
+      });
       return data;
     } catch (err: any) {
       console.error("Error fetching draw detail:", err);
