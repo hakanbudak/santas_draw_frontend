@@ -43,7 +43,7 @@
           <button
               type="button"
               @click="$emit('copy')"
-              class="px-3 md:px-4 py-2 rounded-lg bg-red-600 text-white text-sm md:text-base font-medium hover:bg-red-700 transition-all whitespace-nowrap"
+              class="px-3 md:px-4 py-2 rounded-lg bg-red-600 text-white text-sm md:text-base font-medium hover:bg-red-700 transition-all whitespace-nowrap cursor-pointer"
           >
             {{ t("invitePanel.copy") }}
           </button>

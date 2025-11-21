@@ -45,6 +45,8 @@ export interface DrawDetail {
   requirePhone: boolean;
   drawDate: string | null;
   createdAt: string;
+  language?: string;
+  participantCount?: number;
   participants: InvitedParticipant[];
 }
 
@@ -53,5 +55,8 @@ export interface DrawListItem {
   drawType: string;
   status: string;
   inviteCode: string;
+  participantCount: number;
   createdAt: string;
+  drawDate: string | null;
+  language?: string;
 }

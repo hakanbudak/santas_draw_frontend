@@ -61,7 +61,7 @@
               @click="goToRegister"
               class="flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-lg md:rounded-xl bg-green-600
                    text-white text-xs md:text-sm font-semibold px-4 md:px-6 py-2 md:py-2.5
-                   hover:bg-green-700 hover:shadow-lg transition-all whitespace-nowrap">
+                   hover:bg-green-700 hover:shadow-lg transition-all whitespace-nowrap cursor-pointer">
             {{ t("draw.registerPromptButton") }}
             <span aria-hidden="true">→</span>
           </button>
@@ -235,7 +235,7 @@
                   type="button"
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
-                       transition-all"
+                       transition-all cursor-pointer"
                   @click="handleAddParticipant">
                 {{ editingParticipantId ? t("draw.manualButtons.update") : t("draw.manualButtons.add") }}
               </button>
@@ -258,7 +258,7 @@
                   :disabled="isSaving"
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
-                       transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                       transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
                   @click="saveOrganizer">
                 <span v-if="!isSaving">{{ t("draw.inviteButtons.save") }}</span>
                 <span v-else>{{ t("draw.inviteButtons.saving") }}</span>
@@ -268,7 +268,7 @@
                   type="button"
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-green-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-green-700 hover:shadow-md
-                       transition-all"
+                       transition-all cursor-pointer"
                   @click="handleNewDraw">
                 {{ t("draw.inviteButtons.newDraw") }}
               </button>

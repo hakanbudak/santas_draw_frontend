@@ -32,7 +32,7 @@
             type="button"
             class="mt-auto inline-flex justify-center items-center rounded-lg md:rounded-xl bg-red-600
                  text-white text-lg md:text-xl font-semibold py-2.5 md:py-3 px-5 md:px-6 gap-2
-                 group-hover:bg-red-700 hover:shadow-lg transition-all w-full md:w-auto"
+                 group-hover:bg-red-700 hover:shadow-lg transition-all w-full md:w-auto cursor-pointer"
             @click="$emit('manual-click')"
         >
           {{ t("landing.manualCardButton") }}
@@ -53,7 +53,7 @@
             type="button"
             class="mt-auto inline-flex justify-center items-center rounded-lg md:rounded-xl border-2 border-green-600
                  text-green-700 text-lg md:text-xl font-semibold py-2.5 md:py-3 px-5 md:px-6 bg-white
-                 group-hover:bg-green-50 hover:shadow-lg transition-all gap-2 w-full md:w-auto"
+                 group-hover:bg-green-50 hover:shadow-lg transition-all gap-2 w-full md:w-auto cursor-pointer"
             @click="$emit('register-click')"
         >
           {{ t("landing.inviteCardButton") }}
