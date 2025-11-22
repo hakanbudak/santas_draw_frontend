@@ -13,6 +13,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Docker Deployment](#docker-deployment)
 - [Usage](#usage)
 - [Development](#development)
 - [Tech Stack](#tech-stack)
@@ -96,6 +97,96 @@ npm run dev
 5. **Open your browser**
 
 Navigate to `http://localhost:5173` (or the port shown in your terminal)
+
+## 🐳 Docker Deployment
+
+### Prerequisites
+
+- **Docker** (20.10 or higher)
+- **Docker Compose** (2.0 or higher)
+
+### Quick Start with Docker
+
+1. **Configure environment variables**
+
+```bash
+# Create .env file if it doesn't exist
+cp .env.example .env
+
+# Edit .env with your settings
+nano .env
+```
+
+2. **Build and run with Docker Compose**
+
+```bash
+# Build and start the container
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the container
+docker-compose down
+```
+
+3. **Access the application**
+
+The application will be available at `http://localhost:3000`
+
+### Docker Commands
+
+```bash
+# Build the image
+docker-compose build
+
+# Start in background
+docker-compose up -d
+
+# Start in foreground (see logs)
+docker-compose up
+
+# Stop containers
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Restart container
+docker-compose restart
+
+# Rebuild without cache
+docker-compose build --no-cache
+```
+
+### Environment Variables
+
+Make sure to configure your `.env` file before running Docker:
+
+```bash
+# Example .env file
+VITE_API_URL=https://api.example.com
+# Add other environment variables as needed
+```
+
+**Important:** The `.env` file is already in `.gitignore` and will not be committed to the repository. Make sure to create and configure it before running Docker.
+
+### Production Deployment
+
+For production deployment, you can use the same Docker setup:
+
+```bash
+# Build for production
+docker-compose build
+
+# Run in production mode
+docker-compose up -d
+```
+
+The Docker setup uses:
+- **Multi-stage build** for optimized image size
+- **Node.js 20 Alpine** for minimal image size
+- **serve** package for production-ready static file serving
 
 ## 💻 Usage
 

@@ -1,0 +1,59 @@
+# Dependencies
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build output
+dist
+.vite
+.cache
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation
+README.md
+README-TESTS.md
+LICENSE
+
+# Test files
+coverage
+.nyc_output
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# Misc
+*.log
+*.pid
+*.seed
+*.pid.lock
+
