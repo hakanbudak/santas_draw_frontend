@@ -81,7 +81,7 @@ const messages = {
       fields: {
         firstName: { label: "İsim", placeholder: "Örn. Hakan" },
         lastName: { label: "Soyisim", placeholder: "Örn. Budak" },
-        email: { label: "Email", placeholder: "Örn. hakan@example.com" },
+        email: { label: "Email", placeholder: "{'Örn. hakan@example.com'}" },
         address: { label: "Adres", placeholder: "Hediye göndermek için adres" },
         phone: { label: "Telefon", placeholder: "İletişim için telefon" },
       },
@@ -326,7 +326,7 @@ const messages = {
       fields: {
         firstName: { label: "First name", placeholder: "e.g. Alex" },
         lastName: { label: "Last name", placeholder: "e.g. Stone" },
-        email: { label: "Email", placeholder: "e.g. alex@example.com" },
+        email: { label: "Email", placeholder: "{'e.g. alex@example.com'}" },
         address: { label: "Address", placeholder: "Shipping address for gifts" },
         phone: { label: "Phone", placeholder: "Phone number for contact" },
       },

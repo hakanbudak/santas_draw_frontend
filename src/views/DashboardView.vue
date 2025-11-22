@@ -6,12 +6,14 @@
     <div class="absolute right-8 bottom-10 w-48 h-48 rounded-full bg-green-300/20 blur-2xl"></div>
 
 
-    <div class="absolute top-15 left-1/2 -translate-x-1/2 z-20 text-center w-full px-8">
-      <h1 class="text-7xl font-bold text-amber-50 mb-2 drop-shadow-2xl tracking-wider"
+    <div class="hidden md:block absolute top-15 left-1/2 -translate-x-1/2 z-20 text-center w-full px-8">
+      <h1
+          class="text-7xl font-bold text-amber-50 mb-2 drop-shadow-2xl tracking-wider"
           style="text-shadow: 4px 4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2)">
         {{ t("common.tagline") }}
       </h1>
-      <h1 class="text-8xl font-bold text-yellow-400 drop-shadow-2xl tracking-wider"
+      <h1
+          class="text-8xl font-bold text-yellow-400 drop-shadow-2xl tracking-wider"
           style="text-shadow: 4px 4px 8px rgba(0,0,0,0.4), 0 0 25px rgba(234,179,8,0.3)">
         {{ t("common.title") }}
       </h1>
