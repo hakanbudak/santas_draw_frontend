@@ -70,7 +70,7 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useUserDraws } from "@/composables/draw/useUserDraws";
-import type { DrawDetail, DrawListItem } from "./types";
+import type { DrawDetail, DrawListItem } from "../draw/types";
 
 const { t } = useI18n();
 const { activeDraws, isLoading, hasFetched, fetchDrawDetail } = useUserDraws();

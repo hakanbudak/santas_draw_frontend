@@ -45,7 +45,7 @@
       <div class="flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch">
         <!-- Left: Active draws -->
         <section class="flex-1 w-full">
-          <div class="bg-white/95 rounded-3xl border border-red-100 shadow-[0_20px_45px_rgba(127,29,29,0.35)] h-full min-h-[520px] p-4 md:p-6 flex flex-col gap-4">
+          <div class="bg-white/95 rounded-3xl border border-red-100 shadow-[0_20px_45px_rgba(127,29,29,0.35)] h-full min-h-[32.5rem] p-4 md:p-6 flex flex-col gap-4">
             <header class="text-center">
               <p class="text-xs md:text-sm uppercase tracking-[0.3em] text-red-500">
                 {{ t("dashboard.tagline") }}
@@ -65,7 +65,7 @@
 
         <!-- Right: Mode selection with holiday theme -->
         <section class="flex-1 w-full">
-          <div class="relative overflow-hidden bg-gradient-to-br from-red-500 via-red-600 to-amber-500 rounded-3xl border border-red-200 shadow-2xl shadow-red-900/40 p-5 md:p-8 h-full min-h-[520px] flex flex-col gap-5">
+          <div class="relative overflow-hidden bg-gradient-to-br from-red-500 via-red-600 to-amber-500 rounded-3xl border border-red-200 shadow-2xl shadow-red-900/40 p-5 md:p-8 h-full min-h-[32.5rem] flex flex-col gap-5">
             <div class="absolute inset-0 opacity-40 pointer-events-none">
               <DecorativeLight class="absolute top-6 left-8 bg-yellow-200 shadow-yellow-200/50" :size="10" variant="twinkle" />
               <DecorativeLight class="absolute top-14 right-10 bg-green-200 shadow-green-200/50" :size="8" variant="delayed" />
@@ -87,6 +87,54 @@
             </div>
 
             <div class="relative flex flex-col gap-4">
+              <div class="absolute -top-3 -right-3 z-20">
+                <div class="bg-gradient-to-r from-amber-400 to-amber-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg rotate-6 flex items-center justify-center">
+                  <span class="drop-shadow-md"> {{ t("dashboard.inviteCard.tag") }}</span>
+
+                  <svg class="w-3 h-3 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                </div>
+              </div>
+              <article class="relative bg-gradient-to-br from-amber-500 via-red-600 to-red-700 rounded-2xl border-2 border-amber-300 p-5 flex flex-col md:flex-row items-center gap-4 shadow-2xl overflow-hidden">
+                <div class="absolute inset-0 opacity-20">
+                  <div class="star star-1"></div>
+                  <div class="star star-2"></div>
+                  <div class="star star-3"></div>
+                  <div class="star star-4"></div>
+                  <div class="star star-5"></div>
+                  <div class="star star-6"></div>
+                  <div class="star star-7"></div>
+                  <div class="star star-8"></div>
+                </div>
+
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white to-transparent shimmer"></div>
+
+                <div class="flex-1 text-center md:text-left relative z-10">
+                  <h2 class="text-2xl font-bold text-white mb-2 drop-shadow-md">
+                    {{ t("dashboard.inviteCard.title") }}
+                  </h2>
+                  <p class="text-sm md:text-base text-white/90 mb-2">
+                    {{ t("dashboard.inviteCard.description") }}
+                  </p>
+                  <div class="flex items-center justify-center md:justify-start text-amber-300 text-sm mt-2">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    <span>{{ t("dashboard.inviteCard.description2") }}</span>
+                  </div>
+                </div>
+                <button
+                    type="button"
+                    class="relative z-10 w-full md:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold shadow-lg hover:from-amber-600 hover:to-amber-700 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                    @click="goInvite">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                  </svg>
+                  {{ t("dashboard.inviteCard.cta") }}
+                </button>
+              </article>
+
               <article class="bg-white/90 rounded-2xl border border-red-100 p-5 flex flex-col md:flex-row items-center gap-4 shadow-lg">
                 <div class="flex-1 text-center md:text-left">
                   <h2 class="text-2xl font-bold text-red-700 mb-2">
@@ -103,23 +151,6 @@
                   {{ t("dashboard.manualCard.cta") }}
                 </button>
               </article>
-
-              <article class="bg-white/90 rounded-2xl border border-green-100 p-5 flex flex-col md:flex-row items-center gap-4 shadow-lg">
-                <div class="flex-1 text-center md:text-left">
-                  <h2 class="text-2xl font-bold text-green-700 mb-2">
-                    {{ t("dashboard.inviteCard.title") }}
-                  </h2>
-                  <p class="text-sm md:text-base text-slate-600">
-                    {{ t("dashboard.inviteCard.description") }}
-                  </p>
-                </div>
-                <button
-                    type="button"
-                    class="w-full md:w-auto px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold shadow hover:bg-green-700 transition-all"
-                    @click="goInvite">
-                  {{ t("dashboard.inviteCard.cta") }}
-                </button>
-              </article>
             </div>
           </div>
         </section>
@@ -131,7 +162,7 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import ParticipantsPanel from "@/components/draw/ParticipantsPanel.vue";
+import ParticipantsPanel from "@/components/panel/ParticipantsPanel.vue";
 import type { DrawDetail } from "@/components/draw/types";
 import ChristmasTree from "@/components/christmas/ChristmasTree.vue";
 import DecorativeLight from "@/components/christmas/DecorativeLight.vue";
@@ -160,5 +191,33 @@ const handleDrawSelected = (drawDetail: DrawDetail) => {
 </script>
 
 <style scoped>
+.star {
+  position: absolute;
+  background-color: #FBBF24; /* amber-400 */
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.star-1 { width: 20px; height: 20px; top: 10%; left: 5%; animation: twinkle 3s infinite; }
+.star-2 { width: 15px; height: 15px; top: 25%; right: 10%; animation: twinkle 4s infinite 0.5s; }
+.star-3 { width: 25px; height: 25px; bottom: 15%; left: 15%; animation: twinkle 5s infinite 1s; }
+.star-4 { width: 12px; height: 12px; bottom: 30%; right: 20%; animation: twinkle 3.5s infinite 1.5s; }
+.star-5 { width: 18px; height: 18px; top: 40%; left: 25%; animation: twinkle 4.5s infinite 0.7s; }
+.star-6 { width: 22px; height: 22px; top: 60%; right: 30%; animation: twinkle 3.2s infinite 1.2s; }
+.star-7 { width: 14px; height: 14px; bottom: 10%; right: 10%; animation: twinkle 4.8s infinite 0.3s; }
+.star-8 { width: 16px; height: 16px; top: 15%; right: 25%; animation: twinkle 3.7s infinite 0.9s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+.shimmer {
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 </style>
 
