@@ -211,7 +211,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import type { InvitedParticipant } from "./types";
+import type { InvitedParticipant } from "../draw/types";
 import HowItWorksStep from "@/components/draw/HowItWorksStep.vue";
 
 const props = defineProps<{

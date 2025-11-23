@@ -91,6 +91,8 @@
           @back-to-intro="backToIntro"
           @login-success="router.push('/dashboard')" />
     </div>
+
+    <OpenSourceButton />
   </div>
 </template>
 
@@ -105,6 +107,7 @@ import DecorativeLight from "@/components/christmas/DecorativeLight.vue";
 import IntroCard from "@/components/landing/IntroCard.vue";
 import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
+import OpenSourceButton from "@/components/ui-kit/OpenSourceButton.vue";
 
 const router = useRouter()
 const route = useRoute()

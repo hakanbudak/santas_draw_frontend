@@ -152,7 +152,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import type { Participant } from "./types";
+import type { Participant } from "../draw/types";
 
 defineProps<{
   participants: Participant[];
