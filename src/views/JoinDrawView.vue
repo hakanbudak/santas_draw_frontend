@@ -15,7 +15,6 @@
     <div class="absolute right-10 bottom-10 w-40 h-40 rounded-full bg-green-300/20 blur-2xl"></div>
 
     <div class="relative z-10 w-full max-w-2xl px-4 md:px-8 py-8">
-      <!-- Başarı Modalı -->
       <div
           v-if="showSuccessModal"
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -166,6 +165,25 @@
               <span v-if="!isSubmitting">{{ t("join.submit") }}</span>
               <span v-else>{{ t("join.submitting") }}</span>
             </button>
+
+            <div
+                v-if="submitError"
+                class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative"
+                role="alert"
+            >
+              <div class="flex items-start gap-3">
+                <div class="flex-1">
+                  <span class="block text-sm">{{ submitError }}</span>
+                </div>
+                <button
+                    type="button"
+                    @click="submitError = ''"
+                    class="text-red-700 hover:text-red-900 transition-colors"
+                    aria-label="Kapat">
+                  <span class="text-xl leading-none">×</span>
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -199,10 +217,11 @@ interface DrawInfo {
 
 const inviteCode = ref<string>("");
 const drawInfo = ref<DrawInfo | null>(null);
-const isLoading = ref(false);
+const isLoading = ref<boolean>(false);
 const error = ref<string>("");
-const isSubmitting = ref(false);
-const showSuccessModal = ref(false);
+const isSubmitting = ref<boolean>(false);
+const showSuccessModal = ref<boolean>(false);
+const submitError = ref<string>("");
 
 const form = reactive({
   firstName: { value: "", inValidMessage: "" },
@@ -221,19 +240,16 @@ const clearError = (field: FieldKey) => {
 const validateForm = (): boolean => {
   let isValid = true;
 
-  // İsim validasyonu
   if (!form.firstName.value.trim()) {
     form.firstName.inValidMessage = t("validation.joinFirstNameRequired");
     isValid = false;
   }
 
-  // Soyisim validasyonu
   if (!form.lastName.value.trim()) {
     form.lastName.inValidMessage = t("validation.joinLastNameRequired");
     isValid = false;
   }
 
-  // Email validasyonu
   if (!form.email.value.trim()) {
     form.email.inValidMessage = t("validation.joinEmailRequired");
     isValid = false;
@@ -245,13 +261,11 @@ const validateForm = (): boolean => {
     }
   }
 
-  // Adres validasyonu (eğer gerekliyse)
   if (drawInfo.value?.requireAddress && !form.address.value.trim()) {
     form.address.inValidMessage = t("validation.joinAddressRequired");
     isValid = false;
   }
 
-  // Telefon validasyonu (eğer gerekliyse)
   if (drawInfo.value?.requirePhone && !form.phone.value.trim()) {
     form.phone.inValidMessage = t("validation.joinPhoneRequired");
     isValid = false;
@@ -280,7 +294,7 @@ const fetchDrawInfo = async () => {
     }
   } catch (err: any) {
     console.error("Çekiliş bilgileri yüklenirken hata:", err);
-    error.value = err.response?.data?.message || t("alerts.joinLoadError");
+    error.value = err.response?.data?.detail || t("alerts.joinLoadError");
   } finally {
     isLoading.value = false;
   }
@@ -290,6 +304,7 @@ const handleSubmit = async () => {
   if (!validateForm()) return;
 
   isSubmitting.value = true;
+  submitError.value = "";
   try {
     const payload: any = {
       firstName: form.firstName.value.trim(),
@@ -307,7 +322,6 @@ const handleSubmit = async () => {
 
     await api.post(`/api/v1/draws/join/${inviteCode.value}`, payload);
 
-    // Başarılı olduğunda konfeti animasyonu
     confetti({
       particleCount: 100,
       spread: 70,
@@ -315,12 +329,9 @@ const handleSubmit = async () => {
       colors: ['#EF4444', '#10B981', '#3B82F6', '#F59E0B', '#8B5CF6']
     });
 
-    // Tebrik modalını göster
     showSuccessModal.value = true;
   } catch (err: any) {
-    console.error("Kayıt olurken hata:", err);
-    const errorMessage = err.response?.data?.message || t("alerts.joinSubmitError");
-    alert(errorMessage);
+    submitError.value = err.response?.data?.detail || t("alerts.joinSubmitError");
   } finally {
     isSubmitting.value = false;
   }

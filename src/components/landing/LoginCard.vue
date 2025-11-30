@@ -159,7 +159,7 @@ const submitForm = async () => {
     let message = t("auth.errors.genericLogin")
 
     if (axios.isAxiosError(error) && error.response) {
-      message = error.response.data?.message || message
+      message = error.response.data?.detail || message
     }
 
     generalError.value = message

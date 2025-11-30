@@ -142,7 +142,7 @@ async function createAccount() {
     const error = err as AxiosError<{ message?: string }>;
 
     if (axios.isAxiosError(error) && error.response) {
-      message = error.response.data?.message || message;
+      message = error.response.data?.detail || message;
     }
 
     throw new Error(message);
@@ -172,7 +172,7 @@ async function submitForm() {
     let message = t("auth.errors.genericRegister");
 
     if (axios.isAxiosError(error) && error.response) {
-      message = error.response.data?.message || message;
+      message = error.response.data?.detail || message;
     }
 
     generalError.value = message;

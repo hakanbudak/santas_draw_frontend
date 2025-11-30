@@ -49,7 +49,7 @@ export function useUserDraws() {
         activeDraws.value = [];
       } else {
         console.error("Error fetching user draw:", err);
-        error.value = err?.response?.data?.message || t("alerts.drawsLoadError");
+        error.value = err?.response?.data?.detail || t("alerts.drawsLoadError");
         activeDraws.value = [];
       }
     } finally {
@@ -67,7 +67,7 @@ export function useUserDraws() {
       return data;
     } catch (err: any) {
       console.error("Error fetching draw detail:", err);
-      error.value = err?.response?.data?.message || t("alerts.drawDetailLoadError");
+      error.value = err?.response?.data?.detail || t("alerts.drawDetailLoadError");
       return null;
     }
   };
