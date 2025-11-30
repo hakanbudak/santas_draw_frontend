@@ -31,6 +31,11 @@ const routes = [
         name: 'join-draw',
         component: () => import('@/views/JoinDrawView.vue'),
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'not-found',
+        component: () => import('@/views/NotFoundView.vue'),
+    },
 ]
 
 export const router = createRouter({
