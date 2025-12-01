@@ -257,11 +257,13 @@
         :draw-date="drawDate"
         :is-organizer-saved="isOrganizerSaved"
         :is-draw-locked="isInviteDrawLocked"
+        :execute-draw-error="executeDrawError"
         @copy="copyToClipboard"
         @refresh="fetchInvitedParticipants"
         @execute-draw="executeDraw"
         @delete-participant="deleteInvitedParticipant"
         @show-ready-info="handleShowReadyInfo"
+        @clear-error="clearExecuteDrawError"
     />
   </div>
 </template>
@@ -339,6 +341,7 @@ const {
   showExecuteSuccessModal,
   isOrganizerSaved,
   isInviteDrawLocked,
+  executeDrawError,
   normalizeDrawDate,
   saveOrganizer,
   fetchInvitedParticipants,
@@ -348,6 +351,7 @@ const {
   deleteInvitedParticipant,
   resetInviteDraw,
   markDrawAsReady,
+  clearExecuteDrawError,
 } = useInviteActions({
   participants,
   requireAddress,

@@ -36,6 +36,7 @@ export function useInviteActions(options: Options) {
   const showExecuteSuccessModal = ref<boolean>(false);
   const isOrganizerSaved = ref<boolean>(false);
   const isInviteDrawLocked = ref<boolean>(false);
+  const executeDrawError = ref<string>("");
 
   const minDrawDate = computed(() => {
     const min = new Date();
@@ -218,6 +219,7 @@ export function useInviteActions(options: Options) {
     }
 
     isSaving.value = true;
+    executeDrawError.value = "";
     try {
       const payload = {
         draw_id: drawId.value,
@@ -226,7 +228,7 @@ export function useInviteActions(options: Options) {
       await api.post(`/api/v1/draws/${drawId.value}/execute`, payload);
       await fetchInvitedParticipants();
     } catch (error) {
-      console.error("Çekiliş hazırlanırken hata:", error);
+      executeDrawError.value = error.response?.data?.detail || t("alerts.executeDrawError");
     } finally {
       isSaving.value = false;
     }
@@ -235,6 +237,7 @@ export function useInviteActions(options: Options) {
   const executeDraw = async () => {
     if (!drawId.value || !canExecuteDraw.value) return;
     isExecutingDraw.value = true;
+    executeDrawError.value = "";
     try {
       await api.post(`/api/v1/draws/${drawId.value}/execute`, {
         draw_id: drawId.value,
@@ -275,7 +278,7 @@ export function useInviteActions(options: Options) {
       
       await fetchInvitedParticipants();
     } catch (error) {
-      console.error("Çekiliş yürütülürken hata:", error);
+      executeDrawError.value = error.response?.data?.detail || t("alerts.executeDrawError");
     } finally {
       isExecutingDraw.value = false;
     }
@@ -292,6 +295,10 @@ export function useInviteActions(options: Options) {
     } finally {
       deletingParticipantId.value = null;
     }
+  };
+
+  const clearExecuteDrawError = () => {
+    executeDrawError.value = "";
   };
 
   if (!drawDate.value) {
@@ -313,6 +320,7 @@ export function useInviteActions(options: Options) {
     isCopied.value = false;
     deletingParticipantId.value = null;
     isInviteDrawLocked.value = false;
+    executeDrawError.value = "";
   };
 
   return {
@@ -332,6 +340,7 @@ export function useInviteActions(options: Options) {
     deletingParticipantId,
     isCopied,
     showExecuteSuccessModal,
+    executeDrawError,
     normalizeDrawDate,
     saveOrganizer,
     fetchInvitedParticipants,
@@ -343,6 +352,7 @@ export function useInviteActions(options: Options) {
     isInviteDrawLocked,
     resetInviteDraw,
     markDrawAsReady,
+    clearExecuteDrawError,
   };
 }
 

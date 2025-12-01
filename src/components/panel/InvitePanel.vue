@@ -195,6 +195,26 @@
         <span v-else-if="hasDrawDate">{{ t("draw.readyForDrawButton") }}</span>
         <span v-else>{{ t("draw.executeButton") }}</span>
       </button>
+
+      <div
+          v-if="executeDrawError"
+          class="mt-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative"
+          role="alert"
+      >
+        <div class="flex items-start gap-3">
+          <div class="flex-1">
+            <span class="block text-sm">{{ executeDrawError }}</span>
+          </div>
+          <button
+              type="button"
+              @click="$emit('clear-error')"
+              class="text-red-700 hover:text-red-900 transition-colors"
+              :aria-label="t('common.close')">
+          >
+            <span class="text-xl leading-none">×</span>
+          </button>
+        </div>
+      </div>
       <p v-if="hasDrawDate && !canExecuteDraw" class="text-xs md:text-sm text-slate-500 mt-1.5 md:mt-2">
         {{ t("draw.executeButtonHint") }}
       </p>
@@ -228,6 +248,7 @@ const props = defineProps<{
   drawDate?: string;
   isOrganizerSaved?: boolean;
   isDrawLocked?: boolean;
+  executeDrawError?: string;
 }>();
 
 const hasDrawDate = computed(() => {
@@ -240,6 +261,7 @@ defineEmits<{
   (e: "execute-draw"): void;
   (e: "delete-participant", participantId: number): void;
   (e: "show-ready-info"): void;
+  (e: "clear-error"): void;
 }>();
 
 const { t } = useI18n();
