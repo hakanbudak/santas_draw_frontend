@@ -90,7 +90,7 @@
           v-else-if="currentPanel === 'register'"
           @go-login="openLogin"
           @back-to-intro="backToIntro"
-          @register-success="currentPanel = 'login'" />
+          @register-success="router.push('/dashboard')" />
 
       <LoginCard
           v-else
