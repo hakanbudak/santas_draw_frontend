@@ -234,7 +234,7 @@ const emit = defineEmits<{
   (e: "normalizeDrawDate"): void;
 }>();
 
-const isOpen = ref<boolean>(false);
+const isOpen = ref<boolean>(true);
 const drawTime = ref<string>("");
 
 const requireAddress = computed({
